@@ -1,8 +1,8 @@
 package frc.swervelib.rev;
 
-import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.system.plant.DCMotor;
 import frc.swervelib.DriveController;
@@ -59,7 +59,7 @@ public final class NeoDriveControllerFactoryBuilder {
             motor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
             // Setup encoder
-            CANEncoder encoder = motor.getEncoder();
+            RelativeEncoder encoder = motor.getEncoder();
             double positionConversionFactor = Math.PI * moduleConfiguration.getWheelDiameter() * moduleConfiguration.getDriveReduction();
             encoder.setPositionConversionFactor(positionConversionFactor);
             encoder.setVelocityConversionFactor(positionConversionFactor / 60.0);
@@ -70,9 +70,9 @@ public final class NeoDriveControllerFactoryBuilder {
 
     private static class ControllerImplementation implements DriveController {
         private final CANSparkMax motor;
-        private final CANEncoder encoder;
+        private final RelativeEncoder encoder;
 
-        private ControllerImplementation(CANSparkMax motor, CANEncoder encoder) {
+        private ControllerImplementation(CANSparkMax motor, RelativeEncoder encoder) {
             this.motor = motor;
             this.encoder = encoder;
         }
@@ -90,7 +90,7 @@ public final class NeoDriveControllerFactoryBuilder {
         @Override
         public void setDriveEncoder(double position, double velocity) {
             motor.getEncoder().setPosition(position);
-            //motor.getEncoder()
+            //motor.getEncoder().setVelocity()
         }
 
         @Override

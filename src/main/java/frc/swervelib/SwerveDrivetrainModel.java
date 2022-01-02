@@ -1,4 +1,4 @@
-package frc.swervelib.sim;
+package frc.swervelib;
 
 import java.util.ArrayList;
 
@@ -17,19 +17,8 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.swervelib.SwerveControllerCommandPP;
-import frc.swervelib.SwerveSubsystem;
 import frc.wpiClasses.QuadSwerveSim;
 import frc.wpiClasses.SwerveModuleSim;
-import frc.swervelib.AbsoluteEncoder;
-import frc.swervelib.DriveController;
-import frc.swervelib.Gyroscope;
-import frc.swervelib.Mk4SwerveModuleHelper;
-import frc.swervelib.PoseTelemetry;
-import frc.swervelib.SimConstants;
-import frc.swervelib.SteerController;
-import frc.swervelib.SwerveModule;
-import frc.swervelib.SwerveConstants;
 
 public class SwerveDrivetrainModel {
 
@@ -254,5 +243,13 @@ public class SwerveDrivetrainModel {
                 commandStates -> setModuleStates(commandStates),
                 m_drive);
         return swerveControllerCommand;
+    }
+
+    public ArrayList<SwerveModule> getRealModules() {
+        return realModules;
+    }
+
+    public ArrayList<SwerveModuleSim> getModules() {
+        return modules;
     }
 }

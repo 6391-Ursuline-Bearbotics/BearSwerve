@@ -4,7 +4,6 @@
 
 package frc.swervelib;
 
-import frc.swervelib.sim.SwerveDrivetrainModel;
 import frc.wpiClasses.QuadSwerveSim;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -19,9 +18,9 @@ public class SwerveSubsystem extends SubsystemBase {
   ArrayList<SwerveModule> modules = new ArrayList<SwerveModule>(QuadSwerveSim.NUM_MODULES);
   public SwerveDrivetrainModel dt;
 
-  public SwerveSubsystem(ArrayList<SwerveModule> modules, SwerveDrivetrainModel dt) {
-    modules = this.modules;
+  public SwerveSubsystem(SwerveDrivetrainModel dt) {
     dt = this.dt;
+    modules = dt.getRealModules();
   }
 
   @Override
