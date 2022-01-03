@@ -15,11 +15,11 @@ import java.util.ArrayList;
 public class SwerveSubsystem extends SubsystemBase {
   private SwerveModuleState[] states;
 
-  ArrayList<SwerveModule> modules = new ArrayList<SwerveModule>(QuadSwerveSim.NUM_MODULES);
+  private ArrayList<SwerveModule> modules = new ArrayList<SwerveModule>(QuadSwerveSim.NUM_MODULES);
   public SwerveDrivetrainModel dt;
 
   public SwerveSubsystem(SwerveDrivetrainModel dt) {
-    dt = this.dt;
+    this.dt = dt;
     modules = dt.getRealModules();
   }
 
