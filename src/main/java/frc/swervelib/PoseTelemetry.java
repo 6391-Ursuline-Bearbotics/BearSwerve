@@ -1,5 +1,6 @@
 package frc.swervelib;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -9,6 +10,7 @@ import frc.wpiClasses.QuadSwerveSim;
 
 public class PoseTelemetry {
     QuadSwerveSim swerveDt;
+    SwerveDrivePoseEstimator m_poseEstimator;
     public static Field2d field = new Field2d();
 
     // Pose at the end of the last update
@@ -27,18 +29,15 @@ public class PoseTelemetry {
     // generates this as its primary output.
     Pose2d actualPose = new Pose2d();
 
-    public PoseTelemetry(QuadSwerveSim swerveDt) {
+    public PoseTelemetry(QuadSwerveSim swerveDt, SwerveDrivePoseEstimator m_poseEstimator) {
         this.swerveDt = swerveDt;
+        this.m_poseEstimator = m_poseEstimator;
         SmartDashboard.putData("Field", field);
         field.setRobotPose(SwerveConstants.DFLT_START_POSE);
     }
 
     public void setActualPose(Pose2d act) {
         actualPose = act;
-    }
-
-    public void setEstimatedPose(Pose2d est) {
-        estimatedPose = est;
     }
 
     public void update(double time) {
@@ -51,12 +50,11 @@ public class PoseTelemetry {
         }
 
         if (RobotBase.isSimulation()) {
-            field.getObject("Robot").setPose(actualPose);
+            //field.getObject("Robot").setPose(actualPose);
         }
-        else {
-            field.getObject("EstPose").setPose(estimatedPose);
-        }
-        endPose = swerveDt.getCurPose();
+        field.getObject("EstPose").setPose(m_poseEstimator.getEstimatedPosition());
+
+        endPose = field.getRobotPose();
     }
 
 }

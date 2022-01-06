@@ -65,8 +65,6 @@ public class SwerveDrivetrainModel {
                                     SwerveConstants.MOI_KGM2,
                                     modules);
 
-        dtPoseView = new PoseTelemetry(swerveDt);
-
         // Trustworthiness of the internal model of how motors should be moving
         // Measured in expected standard deviation (meters of position and degrees of
         // rotation)
@@ -85,6 +83,8 @@ public class SwerveDrivetrainModel {
                 SimConstants.CTRLS_SAMPLE_RATE_SEC);
 
         setKnownPose(SwerveConstants.DFLT_START_POSE);
+
+        dtPoseView = new PoseTelemetry(swerveDt, m_poseEstimator);
     }
 
     /**
@@ -94,9 +94,7 @@ public class SwerveDrivetrainModel {
      * @param pose
      */
     public void modelReset(Pose2d pose){
-        dtPoseView.field.setRobotPose(pose);
         swerveDt.modelReset(pose);
-        resetPose(pose);
     }
 
     /**
@@ -170,10 +168,6 @@ public class SwerveDrivetrainModel {
         return dtPoseView.field.getRobotObject().getPose();
     }
 
-    public void resetPose(Pose2d pose){
-        modelReset(pose);
-    }
-
     public Pose2d getEstPose() {
         return curEstPose;
     }
@@ -200,11 +194,6 @@ public class SwerveDrivetrainModel {
     }
 
     public void updateTelemetry(){
-        if(RobotBase.isSimulation()){
-            dtPoseView.setActualPose(getCurActPose());
-        }
-        dtPoseView.setEstimatedPose(getEstPose());
-
         dtPoseView.update(Timer.getFPGATimestamp()*1000);
     }
 
