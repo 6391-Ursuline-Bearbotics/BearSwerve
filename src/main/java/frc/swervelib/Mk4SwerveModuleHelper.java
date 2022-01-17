@@ -509,7 +509,7 @@ public final class Mk4SwerveModuleHelper {
         }
     }
 
-    public static SwerveModuleSim createSim(SwerveModule module, String namePrefix) {
+    public static SwerveModuleSim createSim(SwerveModule module) {
         ModuleConfiguration modConfig = module.getModuleConfiguration();
         return new SwerveModuleSim(module.getSteerController().getSteerMotor(),
                                    module.getDriveController().getDriveMotor(),
@@ -521,7 +521,7 @@ public final class Mk4SwerveModuleHelper {
                                    1.1,
                                    0.8,
                                    SwerveConstants.MASS_kg * 9.81 / QuadSwerveSim.NUM_MODULES, 
-                                   0.01, namePrefix
+                                   0.01
                                    );
     }
 }

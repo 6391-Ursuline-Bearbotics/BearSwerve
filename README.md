@@ -1,23 +1,16 @@
-# WPILib Vendor Template
+### BearSwerve
 
-This is the base WPILib vendor template for 2020. Much of the customizability has been removed for 2020, as it was rarely used, and its easier to just modify the existing one.
+BearSwerve is intended to be an all in one swerve solution including: teleop driving, simulation, trajectory following and more.  It combines the work of [SDS swerve-lib](https://github.com/SwerveDriveSpecialties/swerve-lib), gerth2's [Swerve Sim](https://github.com/wpilibsuite/allwpilib/pull/3374), and [PathPlanner](https://github.com/mjansen4857/pathplanner/releases)
 
-## Layout
+### Submodule
 
-The build is split into 3 libraries. A java library is built. This has access to all of wpilib, and also can JNI load the driver library.
+Bearswerve is intended to be used as a GitSubmodule.  This is similar to a vendordep you may be used to with other third party libraries.  The advantage of the submodule is that the code is actually present within your code.  This makes modficiations and understanding what the submodule is doing easier.
 
-A driver library is built. This should contain all low level code you want to access from both C++, Java and any other text based language. This will not work with LabVIEW. This library has access to the WPILib HAL and wpiutil. This library can only export C symbols. It cannot export C++ symbols at all, and all C symbols must be explicitly listed in the symbols.txt file in the driver folder. JNI symbols must be listed in this file as well. This library however can be written in C++. If you attempt to change this library to have access to all of wpilib, you will break JNI access and it will no longer work.
+### BearSwerve Support
 
-A native C++ library is built. This has access to all of wpilib, and access to the driver library. This should implment the standard wpilib interfaces.
+While BearSwerve has currently only been tested on MK4 modules as mentioned above it borrows code from other established repositories and at least a portion of this code will probably make it into WPILib in the near future.
 
-## Customizing
-For Java, the library name will be the folder name the build is started from, so rename the folder to the name of your choosing. 
+BearSwerve is intended and generic enough to support many different swerve modules and motor / hardware configurations with those modules.
 
-For the native impl, you need to change the library name in the exportsConfigs block of build.gradle, the components block of build.gradle, and the taskList input array name in publish.gradle.
+### Known Issues
 
-For the driver, change the library name in privateExportsConfigs, the driver name in components, and the driverTaskList input array name. In addition, you'll need to change the `lib library` in the native C++ impl component, and the JNI library name in the JNI java class.
-
-For the maven artifact names, those are all in publish.gradle about 40 lines down.
-
-## Building and editing
-This uses gradle, and uses the same base setup as a standard GradleRIO robot project. This means you build with `./gradlew build`, and can install the native toolchain with `./gradlew installRoboRIOToolchain`. If you open this project in VS Code with the wpilib extension installed, you will get intellisense set up for both C++ and Java.

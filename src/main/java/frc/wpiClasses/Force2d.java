@@ -1,14 +1,13 @@
 package frc.wpiClasses;
 
-import org.ejml.simple.SimpleMatrix;
-
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N2;
+import org.ejml.simple.SimpleMatrix;
 
 public class Force2d {
-  Matrix<N2, N1> m;
+  Matrix<N2, N1> m_matrix;
 
   /**
    * Constructs a Force2d with X and Y components equal to zero.
@@ -25,16 +24,16 @@ public class Force2d {
    * @param y The y component of the force.
    */
   public Force2d( double x, double y) {
-    m = new Matrix<>(new SimpleMatrix(2, 1));
-    m.set(0, 0, x);
-    m.set(1, 0, y);
+    m_matrix = new Matrix<>(new SimpleMatrix(2, 1));
+    m_matrix.set(0, 0, x);
+    m_matrix.set(1, 0, y);
   }
 
   /**
    * Constructs a Force2d with the provided force magnitude and angle. This is
    * essentially converting from polar coordinates to Cartesian coordinates.
    *
-   * @param mag The magnititude of the force 
+   * @param mag The magnititude of the force
    * @param angle    The angle from the x-axis to the force vector.
    */
   public Force2d(double mag, Rotation2d angle) {
@@ -42,58 +41,49 @@ public class Force2d {
   }
 
   /**
-   * Constructs a Force2d with the provided 2-element column matrix as the x/y components
+   * Constructs a Force2d with the provided 2-element column matrix as the x/y components.
    *
-   * @param m_in 2 row, 1 column input matrix
+   * @param m 2 row, 1 column input matrix
    */
-  public Force2d(Matrix<N2, N1> m_in) {
-    m = m_in;
+  public Force2d(Matrix<N2, N1> m) {
+    m_matrix = m;
   }
-  
+
   /**
-   * Constructs a Force2d with the provided vector assumed to represent the force
+   * Constructs a Force2d with the provided vector assumed to represent the force.
    *
-   * @param force_vec 
+   * @param forceVec vector which represents some force in two dimensions
    */
-  public Force2d(Vector2d force_vec) {
-    this(force_vec.x, force_vec.y);
+  public Force2d(Vector2d forceVec) {
+    this(forceVec.x, forceVec.y);
   }
 
   /**
    * Returns the X component of the force.
-   *
-   * @return The x component of the force.
    */
-
   public double getX() {
-    return m.get(0, 0);
+    return m_matrix.get(0, 0);
   }
 
   /**
    * Returns the Y component of the force.
-   *
-   * @return The y component of the force.
    */
-
   public double getY() {
-    return m.get(1, 0);
+    return m_matrix.get(1, 0);
   }
 
   /**
    * Returns the norm, or distance from the origin to the force.
-   *
-   * @return The norm of the force.
    */
   public double getNorm() {
-    return m.normF();
+    return m_matrix.normF();
   }
 
   /**
-   * 
-   * @return a unit vector in the directino this force points
+   * Gets a unit vector in the direction this force points.
    */
   public Vector2d getUnitVector() {
-    return new Vector2d(this.getX()/this.getNorm(), this.getY()/this.getNorm());
+    return new Vector2d(this.getX() / this.getNorm(), this.getY() / this.getNorm());
   }
 
   /**
@@ -128,18 +118,15 @@ public class Force2d {
    * @return The sum of the forces.
    */
   public Force2d plus(Force2d other) {
-    return new Force2d(this.m.plus(other.m));
+    return new Force2d(this.m_matrix.plus(other.m_matrix));
   }
 
   /**
-   * Accumulates another force into this force
-   *
-   *
+   * Accumulates another force into this force. Returns nothing, acts "in-place" on this force.
    * @param other The force to add.
-   * @return nothing (acts on this force in-place)
    */
   public void accum(Force2d other) {
-    this.m = this.m.plus(other.m);
+    this.m_matrix = this.m_matrix.plus(other.m_matrix);
   }
 
   /**
@@ -153,7 +140,7 @@ public class Force2d {
    * @return The difference between the two forces.
    */
   public Force2d minus(Force2d other) {
-    return new Force2d(this.m.minus(other.m));
+    return new Force2d(this.m_matrix.minus(other.m_matrix));
   }
 
   /**
@@ -164,7 +151,7 @@ public class Force2d {
    * @return The inverse of the current force.
    */
   public Force2d unaryMinus() {
-    return new Force2d(this.m.times(-1.0));
+    return new Force2d(this.m_matrix.times(-1.0));
   }
 
   /**
@@ -176,7 +163,7 @@ public class Force2d {
    * @return The scaled force.
    */
   public Force2d times(double scalar) {
-    return new Force2d(this.m.times(scalar));
+    return new Force2d(this.m_matrix.times(scalar));
   }
 
   /**
@@ -188,13 +175,13 @@ public class Force2d {
    * @return The reference to the new mutated object.
    */
   public Force2d div(double scalar) {
-    return new Force2d(this.m.div(scalar));
+    return new Force2d(this.m_matrix.div(scalar));
   }
 
   /**
-   * Creates a Vector2d object from the force this object represents
+   * Creates a Vector2d object from the force this object represents.
    */
-  public Vector2d getVector2d(){
+  public Vector2d getVector2d() {
     return new Vector2d(this.getX(), this.getY());
   }
 
@@ -212,7 +199,7 @@ public class Force2d {
   @Override
   public boolean equals(Object obj) {
     if (obj instanceof Force2d) {
-      return this.m.isEqual(((Force2d)obj).m, 1E-9);
+      return this.m_matrix.isEqual(((Force2d) obj).m_matrix, 1E-9);
     } else {
       return false;
     }

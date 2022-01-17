@@ -24,10 +24,10 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 
 /**
- * A command that uses two PID controllers ({@link PIDController}) and a ProfiledPIDController
- * ({@link ProfiledPIDController}) to follow a trajectory {@link Trajectory} with a swerve drive.
+ * A command that uses two PID controllers PIDController and a ProfiledPIDController
+ * ProfiledPIDController to follow a trajectory Trajectory with a swerve drive.
  *
- * <p>This command outputs the raw desired Swerve Module States ({@link SwerveModuleState}) in an
+ * <p>This command outputs the raw desired Swerve Module States SwerveModuleState in an
  * array. The desired wheel and module rotation velocities should be taken from those and used in
  * velocity PIDs.
  *
