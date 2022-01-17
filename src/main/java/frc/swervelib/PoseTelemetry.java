@@ -11,7 +11,7 @@ import frc.wpiClasses.QuadSwerveSim;
 public class PoseTelemetry {
     QuadSwerveSim swerveDt;
     SwerveDrivePoseEstimator m_poseEstimator;
-    public static Field2d field = new Field2d();
+    private static Field2d field = new Field2d();
 
     // Pose at the end of the last update
     Pose2d endPose = SwerveConstants.DFLT_START_POSE;
@@ -55,6 +55,10 @@ public class PoseTelemetry {
         field.getObject("EstPose").setPose(m_poseEstimator.getEstimatedPosition());
 
         endPose = field.getRobotPose();
+    }
+
+    public Pose2d getFieldPose() {
+        return field.getRobotObject().getPose();
     }
 
 }

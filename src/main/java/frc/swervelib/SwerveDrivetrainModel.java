@@ -165,7 +165,7 @@ public class SwerveDrivetrainModel {
     }
 
     public Pose2d getCurActPose(){
-        return dtPoseView.field.getRobotObject().getPose();
+        return dtPoseView.getFieldPose();
     }
 
     public Pose2d getEstPose() {
