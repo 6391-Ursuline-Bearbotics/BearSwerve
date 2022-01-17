@@ -28,7 +28,7 @@ public class SwerveSubsystem extends SubsystemBase {
     states = dt.getSwerveModuleStates();
 
     if (states != null) {
-      SwerveDriveKinematics.normalizeWheelSpeeds(states, SwerveConstants.MAX_FWD_REV_SPEED_MPS);
+      SwerveDriveKinematics.desaturateWheelSpeeds(states, SwerveConstants.MAX_FWD_REV_SPEED_MPS);
 
       modules.get(0).set(states[0].speedMetersPerSecond / SwerveConstants.MAX_FWD_REV_SPEED_MPS * SwerveConstants.MAX_VOLTAGE, states[0].angle.getRadians());
       modules.get(1).set(states[1].speedMetersPerSecond / SwerveConstants.MAX_FWD_REV_SPEED_MPS * SwerveConstants.MAX_VOLTAGE, states[1].angle.getRadians());
