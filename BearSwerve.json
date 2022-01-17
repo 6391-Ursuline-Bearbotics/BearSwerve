@@ -3,9 +3,7 @@
     "name": "bearswerve",
     "version": "2022.0.0",
     "uuid": "e00fa50a-6b3e-11ec-90d6-0242ac120003",
-    "mavenUrls": [
-      "https://jitpack.io"
-    ],
+    "mavenUrls": [],
     "jsonUrl": "https://raw.githubusercontent.com/6391-Ursuline-Bearbotics/BearSwerve/master/BearSwerve.json",
     "javaDependencies": [
       {
