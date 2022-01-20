@@ -5,16 +5,19 @@ import java.util.ArrayList;
 import com.pathplanner.lib.PathPlannerTrajectory;
 
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.HolonomicDriveController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.wpiClasses.QuadSwerveSim;
 import frc.wpiClasses.SwerveModuleSim;
@@ -44,15 +47,19 @@ public class SwerveDrivetrainModel {
         new ProfiledPIDController(
             SwerveConstants.THETACONTROLLERkP, 0, 0, SwerveConstants.THETACONTROLLERCONSTRAINTS);
 
+    HolonomicDriveController m_holo;
+    
+    private static final SendableChooser<String> orientationChooser = new SendableChooser<>();
+
     public SwerveDrivetrainModel(ArrayList<SwerveModule> realModules, Gyroscope gyro){
         this.gyro = gyro;
         this.realModules = realModules;
 
         if (RobotBase.isSimulation()) {
-            modules.add(Mk4SwerveModuleHelper.createSim(realModules.get(0), "FL"));
-            modules.add(Mk4SwerveModuleHelper.createSim(realModules.get(1), "FR"));
-            modules.add(Mk4SwerveModuleHelper.createSim(realModules.get(2), "BL"));
-            modules.add(Mk4SwerveModuleHelper.createSim(realModules.get(3), "BR"));
+            modules.add(Mk4SwerveModuleHelper.createSim(realModules.get(0)));
+            modules.add(Mk4SwerveModuleHelper.createSim(realModules.get(1)));
+            modules.add(Mk4SwerveModuleHelper.createSim(realModules.get(2)));
+            modules.add(Mk4SwerveModuleHelper.createSim(realModules.get(3)));
         }
         
         thetaController.enableContinuousInput(-Math.PI, Math.PI);
@@ -85,6 +92,13 @@ public class SwerveDrivetrainModel {
         setKnownPose(SwerveConstants.DFLT_START_POSE);
 
         dtPoseView = new PoseTelemetry(swerveDt, m_poseEstimator);
+
+        // Control Orientation Chooser
+        orientationChooser.setDefaultOption("Field Oriented", "Field Oriented");
+        orientationChooser.addOption("Robot Oriented", "Robot Oriented");
+        SmartDashboard.putData("Orientation Chooser", orientationChooser);
+
+        m_holo = new HolonomicDriveController(SwerveConstants.XPIDCONTROLLER, SwerveConstants.YPIDCONTROLLER, thetaController);
     }
 
     /**
@@ -157,7 +171,40 @@ public class SwerveDrivetrainModel {
      * @param desiredStates The desired SwerveModule states.
      */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
-      this.states = desiredStates;
+        this.states = desiredStates;
+    }
+
+    /**
+     * Sets the swerve ModuleStates.
+     *
+     * @param chassisSpeeds The desired SwerveModule states.
+     */
+    public void setModuleStates(ChassisSpeeds chassisSpeeds) {
+        this.states = SwerveConstants.KINEMATICS.toSwerveModuleStates(chassisSpeeds);
+    }
+
+    public void setModuleStates(SwerveInput input) {
+        switch (orientationChooser.getSelected()) {
+            case "Field Oriented":
+                states = SwerveConstants.KINEMATICS.toSwerveModuleStates(
+                        ChassisSpeeds.fromFieldRelativeSpeeds(
+                                input.m_translationX * SwerveConstants.MAX_FWD_REV_SPEED_MPS,
+                                input.m_translationY * SwerveConstants.MAX_STRAFE_SPEED_MPS,
+                                input.m_rotation * SwerveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC,
+                                getGyroscopeRotation()
+                        )    
+                );
+                break;
+            case "Robot Oriented":
+                states = SwerveConstants.KINEMATICS.toSwerveModuleStates(
+                        new ChassisSpeeds(
+                                input.m_translationX * SwerveConstants.MAX_FWD_REV_SPEED_MPS,
+                                input.m_translationY * SwerveConstants.MAX_STRAFE_SPEED_MPS,
+                                input.m_rotation * SwerveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC
+                        )  
+                );
+                break;
+        }
     }
 
     public SwerveModuleState[] getSwerveModuleStates() {
@@ -165,7 +212,7 @@ public class SwerveDrivetrainModel {
     }
 
     public Pose2d getCurActPose(){
-        return dtPoseView.field.getRobotObject().getPose();
+        return dtPoseView.getFieldPose();
     }
 
     public Pose2d getEstPose() {
@@ -211,10 +258,10 @@ public class SwerveDrivetrainModel {
                 SwerveConstants.KINEMATICS,
 
                 // Position controllers
-                new PIDController(SwerveConstants.TRAJECTORYXkP, 0, 0),
-                new PIDController(SwerveConstants.TRAJECTORYYkP, 0, 0),
+                SwerveConstants.XPIDCONTROLLER,
+                SwerveConstants.YPIDCONTROLLER,
                 thetaController,
-                commandStates -> setModuleStates(commandStates),
+                commandStates -> this.states = commandStates,
                 m_drive);
         return swerveControllerCommand;
     }
@@ -225,5 +272,9 @@ public class SwerveDrivetrainModel {
 
     public ArrayList<SwerveModuleSim> getModules() {
         return modules;
+    }
+
+    public void goToPose(Pose2d desiredPose, double angle) {
+        setModuleStates(m_holo.calculate(getCurActPose(), desiredPose, 1, Rotation2d.fromDegrees(angle)));
     }
 }
