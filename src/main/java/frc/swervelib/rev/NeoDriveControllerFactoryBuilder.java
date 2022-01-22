@@ -9,8 +9,6 @@ import frc.swervelib.DriveController;
 import frc.swervelib.DriveControllerFactory;
 import frc.swervelib.ModuleConfiguration;
 
-import static frc.swervelib.rev.RevUtils.checkNeoError;
-
 public final class NeoDriveControllerFactoryBuilder {
     private double nominalVoltage = Double.NaN;
     private double currentLimit = Double.NaN;
@@ -45,16 +43,16 @@ public final class NeoDriveControllerFactoryBuilder {
 
             // Setup voltage compensation
             if (hasVoltageCompensation()) {
-                checkNeoError(motor.enableVoltageCompensation(nominalVoltage), "Failed to enable voltage compensation");
+                motor.enableVoltageCompensation(nominalVoltage);
             }
 
             if (hasCurrentLimit()) {
-                checkNeoError(motor.setSmartCurrentLimit((int) currentLimit), "Failed to set current limit for NEO");
+                motor.setSmartCurrentLimit((int) currentLimit);
             }
 
-            checkNeoError(motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus0, 100), "Failed to set periodic status frame 0 rate");
-            checkNeoError(motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus1, 20), "Failed to set periodic status frame 1 rate");
-            checkNeoError(motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus2, 20), "Failed to set periodic status frame 2 rate");
+            motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus0, 100);
+            motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus1, 20);
+            motor.setPeriodicFramePeriod(CANSparkMaxLowLevel.PeriodicFrame.kStatus2, 20);
             // Set neutral mode to brake
             motor.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
