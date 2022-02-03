@@ -26,7 +26,9 @@ public class ForceAtPose2d {
   }
 
   /**
-   * Returns the torque associated with this force at distance.
+   * @param centerOfRotation Pose at the center of rotation that the
+   * torque should be calculated from
+   * @return Returns the torque associated with this force at distance.
    * positive is counter-clockwise, negative is clockwise
    */
   public double getTorque(Pose2d centerOfRotation) {

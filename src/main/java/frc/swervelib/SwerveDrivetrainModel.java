@@ -105,7 +105,7 @@ public class SwerveDrivetrainModel {
      * Handles discontinuous jumps in robot pose. Used at the start of
      * autonomous, if the user manually drags the robot across the field in the
      * Field2d widget, or something similar to that.
-     * @param pose
+     * @param pose The new pose the robot is "jumping" to.
      */
     public void modelReset(Pose2d pose){
         swerveDt.modelReset(pose);
@@ -113,8 +113,8 @@ public class SwerveDrivetrainModel {
 
     /**
      * Advance the simulation forward by one step
-     * @param isDisabled
-     * @param batteryVoltage
+     * @param isDisabled Boolean that indicates if the robot is in the disabled mode
+     * @param batteryVoltage Amount of voltage available to the drivetrain at the current step.
      */
     public void update(boolean isDisabled, double batteryVoltage){
         // Calculate and update input voltages to each motor.
@@ -171,7 +171,7 @@ public class SwerveDrivetrainModel {
      * @param desiredStates The desired SwerveModule states.
      */
     public void setModuleStates(SwerveModuleState[] desiredStates) {
-        this.states = desiredStates;
+        states = desiredStates;
     }
 
     /**
@@ -180,7 +180,7 @@ public class SwerveDrivetrainModel {
      * @param chassisSpeeds The desired SwerveModule states.
      */
     public void setModuleStates(ChassisSpeeds chassisSpeeds) {
-        this.states = SwerveConstants.KINEMATICS.toSwerveModuleStates(chassisSpeeds);
+        states = SwerveConstants.KINEMATICS.toSwerveModuleStates(chassisSpeeds);
     }
 
     public void setModuleStates(SwerveInput input) {

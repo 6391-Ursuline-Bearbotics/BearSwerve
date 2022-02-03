@@ -194,7 +194,7 @@ public class QuadSwerveSim {
     }
 
     /**
-     * Returns the current pose of the drivetrain.
+     * @return Returns the current pose of the drivetrain.
      */
     public Pose2d getCurPose() {
         return m_curPose;

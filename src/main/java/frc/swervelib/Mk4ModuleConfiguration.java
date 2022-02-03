@@ -43,14 +43,14 @@ public class Mk4ModuleConfiguration {
     }
 
     /**
-     * Gets the type of the drive motor.
+     * @return Gets the type of the drive motor.
      */
     public DCMotor getDriveMotor() {
         return driveMotor;
     }
 
     /**
-     * Gets the type of the steer motor.
+     * @return Gets the type of the steer motor.
      */
     public DCMotor getSteerMotor() {
         return steerMotor;
@@ -58,6 +58,7 @@ public class Mk4ModuleConfiguration {
 
     /**
      * Sets the type of the drive motor.
+     * @param motor The DCMotor to be used as the Drive Motor
      */
     public void setDriveMotor(DCMotor motor) {
         driveMotor = motor;
@@ -65,6 +66,7 @@ public class Mk4ModuleConfiguration {
 
     /**
      * Sets the type of the steer motor.
+     * @param motor The DCMotor to be used as the Steer Motor
      */
     public void setSteerMotor(DCMotor motor) {
         steerMotor = motor;

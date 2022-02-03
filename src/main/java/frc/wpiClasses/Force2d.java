@@ -59,28 +59,28 @@ public class Force2d {
   }
 
   /**
-   * Returns the X component of the force.
+   * @return Returns the X component of the force.
    */
   public double getX() {
     return m_matrix.get(0, 0);
   }
 
   /**
-   * Returns the Y component of the force.
+   * @return Returns the Y component of the force.
    */
   public double getY() {
     return m_matrix.get(1, 0);
   }
 
   /**
-   * Returns the norm, or distance from the origin to the force.
+   * @return Returns the norm, or distance from the origin to the force.
    */
   public double getNorm() {
     return m_matrix.normF();
   }
 
   /**
-   * Gets a unit vector in the direction this force points.
+   * @return Gets a unit vector in the direction this force points.
    */
   public Vector2d getUnitVector() {
     return new Vector2d(this.getX() / this.getNorm(), this.getY() / this.getNorm());
@@ -179,7 +179,7 @@ public class Force2d {
   }
 
   /**
-   * Creates a Vector2d object from the force this object represents.
+   * @return Creates a Vector2d object from the force this object represents.
    */
   public Vector2d getVector2d() {
     return new Vector2d(this.getX(), this.getY());

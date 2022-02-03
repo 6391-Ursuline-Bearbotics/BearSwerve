@@ -57,6 +57,7 @@ public final class Mk4SwerveModuleHelper {
      * @param steerMotorPort   The CAN ID of the steer Falcon 500.
      * @param steerEncoderPort The CAN ID of the steer CANCoder.
      * @param steerOffset      The offset of the CANCoder in radians.
+     * @param namePrefix       The name of the swerve module for unique identification
      * @return The configured swerve module.
      */
     public static SwerveModule createFalcon500(
@@ -94,6 +95,7 @@ public final class Mk4SwerveModuleHelper {
      * @param steerMotorPort   The CAN ID of the steer Falcon 500.
      * @param steerEncoderPort The CAN ID of the steer CANCoder.
      * @param steerOffset      The offset of the CANCoder in radians.
+     * @param namePrefix       The name of the swerve module for unique identification
      * @return The configured swerve module.
      */
     public static SwerveModule createFalcon500(
@@ -116,6 +118,7 @@ public final class Mk4SwerveModuleHelper {
      * @param steerMotorPort   The CAN ID of the steer Falcon 500.
      * @param steerEncoderPort The CAN ID of the steer CANCoder.
      * @param steerOffset      The offset of the CANCoder in radians.
+     * @param namePrefix       The name of the swerve module for unique identification
      * @return The configured swerve module.
      */
     public static SwerveModule createFalcon500(
@@ -147,6 +150,7 @@ public final class Mk4SwerveModuleHelper {
      * @param steerMotorPort   The CAN ID of the steer Falcon 500.
      * @param steerEncoderPort The CAN ID of the steer CANCoder.
      * @param steerOffset      The offset of the CANCoder in radians.
+     * @param namePrefix       The name of the swerve module for unique identification
      * @return The configured swerve module.
      */
     public static SwerveModule createFalcon500(
@@ -170,6 +174,7 @@ public final class Mk4SwerveModuleHelper {
      * @param steerMotorPort   The CAN ID of the steer NEO.
      * @param steerEncoderPort The CAN ID of the steer CANCoder.
      * @param steerOffset      The offset of the CANCoder in radians.
+     * @param namePrefix       The name of the swerve module for unique identification
      * @return The configured swerve module.
      */
     public static SwerveModule createNeo(
@@ -205,6 +210,7 @@ public final class Mk4SwerveModuleHelper {
      * @param steerMotorPort   The CAN ID of the steer NEO.
      * @param steerEncoderPort The CAN ID of the steer CANCoder.
      * @param steerOffset      The offset of the CANCoder in radians.
+     * @param namePrefix       The name of the swerve module for unique identification
      * @return The configured swerve module.
      */
     public static SwerveModule createNeo(
@@ -227,6 +233,7 @@ public final class Mk4SwerveModuleHelper {
      * @param steerMotorPort   The CAN ID of the steer NEO.
      * @param steerEncoderPort The CAN ID of the steer CANCoder.
      * @param steerOffset      The offset of the CANCoder in radians.
+     * @param namePrefix       The name of the swerve module for unique identification
      * @return The configured swerve module.
      */
     public static SwerveModule createNeo(
@@ -258,6 +265,7 @@ public final class Mk4SwerveModuleHelper {
      * @param steerMotorPort   The CAN ID of the steer NEO.
      * @param steerEncoderPort The CAN ID of the steer CANCoder.
      * @param steerOffset      The offset of the CANCoder in radians.
+     * @param namePrefix       The name of the swerve module for unique identification
      * @return The configured swerve module.
      */
     public static SwerveModule createNeo(
@@ -281,6 +289,7 @@ public final class Mk4SwerveModuleHelper {
      * @param steerMotorPort   The CAN ID of the steer NEO.
      * @param steerEncoderPort The CAN ID of the steer CANCoder.
      * @param steerOffset      The offset of the CANCoder in radians.
+     * @param namePrefix       The name of the swerve module for unique identification
      * @return The configured swerve module.
      */
     public static SwerveModule createFalcon500Neo(
@@ -316,6 +325,7 @@ public final class Mk4SwerveModuleHelper {
      * @param steerMotorPort   The CAN ID of the steer NEO.
      * @param steerEncoderPort The CAN ID of the steer CANCoder.
      * @param steerOffset      The offset of the CANCoder in radians.
+     * @param namePrefix       The name of the swerve module for unique identification
      * @return The configured swerve module.
      */
     public static SwerveModule createFalcon500Neo(
@@ -338,6 +348,7 @@ public final class Mk4SwerveModuleHelper {
      * @param steerMotorPort   The CAN ID of the steer NEO.
      * @param steerEncoderPort The CAN ID of the steer CANCoder.
      * @param steerOffset      The offset of the CANCoder in radians.
+     * @param namePrefix       The name of the swerve module for unique identification
      * @return The configured swerve module.
      */
     public static SwerveModule createFalcon500Neo(
@@ -369,6 +380,7 @@ public final class Mk4SwerveModuleHelper {
      * @param steerMotorPort   The CAN ID of the steer NEO.
      * @param steerEncoderPort The CAN ID of the steer CANCoder.
      * @param steerOffset      The offset of the CANCoder in radians.
+     * @param namePrefix       The name of the swerve module for unique identification
      * @return The configured swerve module.
      */
     public static SwerveModule createFalcon500Neo(
@@ -392,6 +404,7 @@ public final class Mk4SwerveModuleHelper {
      * @param steerMotorPort   The CAN ID of the steer Falcon 500.
      * @param steerEncoderPort The CAN ID of the steer CANCoder.
      * @param steerOffset      The offset of the CANCoder in radians.
+     * @param namePrefix       The name of the swerve module for unique identification
      * @return The configured swerve module.
      */
     public static SwerveModule createNeoFalcon500(
@@ -427,6 +440,7 @@ public final class Mk4SwerveModuleHelper {
      * @param steerMotorPort   The CAN ID of the steer Falcon 500.
      * @param steerEncoderPort The CAN ID of the steer CANCoder.
      * @param steerOffset      The offset of the CANCoder in radians.
+     * @param namePrefix       The name of the swerve module for unique identification
      * @return The configured swerve module.
      */
     public static SwerveModule createNeoFalcon500(
@@ -449,6 +463,7 @@ public final class Mk4SwerveModuleHelper {
      * @param steerMotorPort   The CAN ID of the steer Falcon 500.
      * @param steerEncoderPort The CAN ID of the steer CANCoder.
      * @param steerOffset      The offset of the CANCoder in radians.
+     * @param namePrefix       The name of the swerve module for unique identification
      * @return The configured swerve module.
      */
     public static SwerveModule createNeoFalcon500(
@@ -480,6 +495,7 @@ public final class Mk4SwerveModuleHelper {
      * @param steerMotorPort   The CAN ID of the steer Falcon 500.
      * @param steerEncoderPort The CAN ID of the steer CANCoder.
      * @param steerOffset      The offset of the CANCoder in radians.
+     * @param namePrefix       The name of the swerve module for unique identification
      * @return The configured swerve module.
      */
     public static SwerveModule createNeoFalcon500(

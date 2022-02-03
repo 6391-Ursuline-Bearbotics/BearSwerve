@@ -90,7 +90,7 @@ public class SwerveModuleSim {
     }
 
     /**
-     * Returns the current physical rotation count of the azimuth encoder axle 
+     * @return Returns the current physical rotation count of the azimuth encoder axle 
      * shaft in total rotations since last reset - not wrapped. 
      * IE, if you spin your module exactly two and a half times in the
      *  positive direction, this will return 2.5 (not 0.5).
@@ -100,7 +100,7 @@ public class SwerveModuleSim {
     }
 
     /**
-     * Returns the total number of physical rotations the wheel has done
+     * @return Returns the total number of physical rotations the wheel has done
      * since the last reset - not wrapped. IE, if your wheel rotated through
      * 20.5 rotations, this function would return 20.5 (not 0.5).
      */

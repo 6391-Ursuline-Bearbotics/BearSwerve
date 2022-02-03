@@ -40,14 +40,14 @@ public class ModuleConfiguration {
     }
 
     /**
-     * Gets the diameter of the wheel in meters.
+     * @return Gets the diameter of the wheel in meters.
      */
     public double getWheelDiameter() {
         return wheelDiameter;
     }
 
     /**
-     * Gets the overall reduction of the drive system.
+     * @return Gets the overall reduction of the drive system.
      * <p>
      * If this value is multiplied by drive motor rotations the result would be drive wheel rotations.
      */
@@ -56,14 +56,14 @@ public class ModuleConfiguration {
     }
 
     /**
-     * Gets if the drive motor should be inverted.
+     * @return Gets if the drive motor should be inverted.
      */
     public boolean isDriveInverted() {
         return driveInverted;
     }
 
     /**
-     * Gets the overall reduction of the steer system.
+     * @return Gets the overall reduction of the steer system.
      * <p>
      * If this value is multiplied by steering motor rotations the result would be steering pulley rotations.
      */
@@ -72,7 +72,7 @@ public class ModuleConfiguration {
     }
 
     /**
-     * Gets if the steering motor should be inverted.
+     * @return Gets if the steering motor should be inverted.
      */
     public boolean isSteerInverted() {
         return steerInverted;
