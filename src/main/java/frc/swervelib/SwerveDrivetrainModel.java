@@ -16,6 +16,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -242,6 +243,10 @@ public class SwerveDrivetrainModel {
 
     public void updateTelemetry(){
         dtPoseView.update(Timer.getFPGATimestamp()*1000);
+    }
+
+    public Field2d getField() {
+        return dtPoseView.getField();
     }
 
     public void resetWheelEncoders() {
