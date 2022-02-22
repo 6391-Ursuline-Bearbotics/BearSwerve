@@ -6,6 +6,7 @@ package frc.swervelib;
 
 import frc.wpiClasses.QuadSwerveSim;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,10 +18,12 @@ public class SwerveSubsystem extends SubsystemBase {
 
   private ArrayList<SwerveModule> modules = new ArrayList<SwerveModule>(QuadSwerveSim.NUM_MODULES);
   public SwerveDrivetrainModel dt;
+  public SwerveDriveOdometry m_odometry;
 
   public SwerveSubsystem(SwerveDrivetrainModel dt) {
     this.dt = dt;
     modules = dt.getRealModules();
+    m_odometry = new SwerveDriveOdometry(SwerveConstants.KINEMATICS, dt.getGyroscopeRotation());
   }
 
   @Override
@@ -35,6 +38,13 @@ public class SwerveSubsystem extends SubsystemBase {
       modules.get(2).set(states[2].speedMetersPerSecond / SwerveConstants.MAX_FWD_REV_SPEED_MPS * SwerveConstants.MAX_VOLTAGE, states[2].angle.getRadians());
       modules.get(3).set(states[3].speedMetersPerSecond / SwerveConstants.MAX_FWD_REV_SPEED_MPS * SwerveConstants.MAX_VOLTAGE, states[3].angle.getRadians());
     }
+
+    states[0].speedMetersPerSecond = Math.abs(modules.get(0).getDriveVelocity());
+    states[1].speedMetersPerSecond = Math.abs(modules.get(1).getDriveVelocity());
+    states[2].speedMetersPerSecond = Math.abs(modules.get(2).getDriveVelocity());
+    states[3].speedMetersPerSecond = Math.abs(modules.get(3).getDriveVelocity());
+    m_odometry.update(dt.getGyroscopeRotation(), states);
+
     dt.updateTelemetry();
   }
 

@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonFXConfiguration;
 
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.wpilibj.RobotBase;
 import frc.swervelib.DriveController;
 import frc.swervelib.DriveControllerFactory;
 import frc.swervelib.ModuleConfiguration;
@@ -17,6 +18,9 @@ public final class Falcon500DriveControllerFactoryBuilder {
 
     private static final int CAN_TIMEOUT_MS = 250;
     private static final int STATUS_FRAME_GENERAL_PERIOD_MS = 250;
+    private static final int CAN_TIMEOUT_MS_SIM = 100;
+    private static final int STATUS_FRAME_GENERAL_PERIOD_MS_SIM = 100;
+
 
     private double nominalVoltage = Double.NaN;
     private double currentLimit = Double.NaN;
@@ -74,11 +78,20 @@ public final class Falcon500DriveControllerFactoryBuilder {
             motor.setSensorPhase(true);
 
             // Reduce CAN status frame rates
-            motor.setStatusFramePeriod(
+            if (RobotBase.isSimulation()) {
+                motor.setStatusFramePeriod(
                     StatusFrameEnhanced.Status_1_General,
-                    STATUS_FRAME_GENERAL_PERIOD_MS,
-                    CAN_TIMEOUT_MS
-            );
+                    STATUS_FRAME_GENERAL_PERIOD_MS_SIM,
+                    CAN_TIMEOUT_MS_SIM
+                );
+            }
+            else {
+                motor.setStatusFramePeriod(
+                        StatusFrameEnhanced.Status_1_General,
+                        STATUS_FRAME_GENERAL_PERIOD_MS,
+                        CAN_TIMEOUT_MS
+                );
+            }
 
             return new ControllerImplementation(motor, sensorVelocityCoefficient);
         }

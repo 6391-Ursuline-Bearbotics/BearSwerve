@@ -3,6 +3,7 @@ package frc.swervelib;
 import java.util.ArrayList;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.HolonomicDriveController;
@@ -222,8 +223,8 @@ public class SwerveDrivetrainModel {
 
     public void setKnownPose(Pose2d in) {
         resetWheelEncoders();
-        // No need to reset gyro, pose estimator does that.
         m_poseEstimator.resetPosition(in, getGyroscopeRotation());
+        zeroGyroscope();
         updateDownfieldFlag();
         curEstPose = in;
     }
@@ -256,8 +257,8 @@ public class SwerveDrivetrainModel {
     }
 
     public Command createCommandForTrajectory(PathPlannerTrajectory trajectory, SwerveSubsystem m_drive) {
-        SwerveControllerCommandPP swerveControllerCommand =
-            new SwerveControllerCommandPP(
+        PPSwerveControllerCommand swerveControllerCommand =
+            new PPSwerveControllerCommand(
                 trajectory,
                 () -> getCurActPose(), // Functional interface to feed supplier
                 SwerveConstants.KINEMATICS,
@@ -268,7 +269,7 @@ public class SwerveDrivetrainModel {
                 thetaController,
                 commandStates -> this.states = commandStates,
                 m_drive);
-        return swerveControllerCommand;
+        return swerveControllerCommand.andThen(() -> setModuleStates(new SwerveInput(0,0,0)));
     }
 
     public ArrayList<SwerveModule> getRealModules() {
