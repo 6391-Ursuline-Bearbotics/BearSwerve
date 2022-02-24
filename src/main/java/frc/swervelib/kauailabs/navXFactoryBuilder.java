@@ -34,6 +34,11 @@ public class navXFactoryBuilder {
         }
 
         @Override
+        public Boolean getGyroReady() {
+            return !navX.isCalibrating();
+        }
+
+        @Override
         public void zeroGyroscope() {
             navX.zeroYaw();
         }

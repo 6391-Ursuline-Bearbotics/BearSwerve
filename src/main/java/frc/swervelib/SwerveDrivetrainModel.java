@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -38,6 +39,7 @@ public class SwerveDrivetrainModel {
 
     Pose2d endPose;
     PoseTelemetry dtPoseView;
+    SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(SwerveConstants.KINEMATICS, getGyroscopeRotation());
 
     SwerveDrivePoseEstimator m_poseEstimator;
     Pose2d curEstPose = new Pose2d(SwerveConstants.DFLT_START_POSE.getTranslation(), SwerveConstants.DFLT_START_POSE.getRotation());
@@ -111,6 +113,7 @@ public class SwerveDrivetrainModel {
      */
     public void modelReset(Pose2d pose){
         swerveDt.modelReset(pose);
+        m_odometry.resetPosition(pose, getGyroscopeRotation());
     }
 
     /**
@@ -213,8 +216,8 @@ public class SwerveDrivetrainModel {
       return states;
     }
 
-    public Pose2d getCurActPose(){
-        return dtPoseView.getFieldPose();
+    public Pose2d getPose(){
+        return m_odometry.getPoseMeters();
     }
 
     public Pose2d getEstPose() {
@@ -222,6 +225,7 @@ public class SwerveDrivetrainModel {
     }
 
     public void setKnownPose(Pose2d in) {
+        m_odometry.resetPosition(in, getGyroscopeRotation());
         resetWheelEncoders();
         m_poseEstimator.resetPosition(in, getGyroscopeRotation());
         zeroGyroscope();
@@ -242,6 +246,10 @@ public class SwerveDrivetrainModel {
         return gyro.getGyroHeading();
     }
 
+    public Boolean getGyroReady() {
+        return gyro.getGyroReady();
+    }
+
     public void updateTelemetry(){
         dtPoseView.update(Timer.getFPGATimestamp()*1000);
     }
@@ -260,7 +268,7 @@ public class SwerveDrivetrainModel {
         PPSwerveControllerCommand swerveControllerCommand =
             new PPSwerveControllerCommand(
                 trajectory,
-                () -> getCurActPose(), // Functional interface to feed supplier
+                () -> getPose(), // Functional interface to feed supplier
                 SwerveConstants.KINEMATICS,
 
                 // Position controllers
@@ -281,6 +289,14 @@ public class SwerveDrivetrainModel {
     }
 
     public void goToPose(Pose2d desiredPose, double angle) {
-        setModuleStates(m_holo.calculate(getCurActPose(), desiredPose, 1, Rotation2d.fromDegrees(angle)));
+        setModuleStates(m_holo.calculate(getPose(), desiredPose, 1, Rotation2d.fromDegrees(angle)));
+    }
+
+    public void updateOdometry() {
+        states[0].speedMetersPerSecond = Math.abs(realModules.get(0).getDriveVelocity());
+        states[1].speedMetersPerSecond = Math.abs(realModules.get(1).getDriveVelocity());
+        states[2].speedMetersPerSecond = Math.abs(realModules.get(2).getDriveVelocity());
+        states[3].speedMetersPerSecond = Math.abs(realModules.get(3).getDriveVelocity());
+        m_odometry.update(getGyroscopeRotation(), states);
     }
 }

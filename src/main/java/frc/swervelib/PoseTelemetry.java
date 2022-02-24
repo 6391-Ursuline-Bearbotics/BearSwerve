@@ -52,7 +52,7 @@ public class PoseTelemetry {
         if (RobotBase.isSimulation()) {
             //field.getObject("Robot").setPose(actualPose);
         }
-        field.getRobotObject().setPose(m_poseEstimator.getEstimatedPosition());
+        field.setRobotPose(m_poseEstimator.getEstimatedPosition());
 
         endPose = field.getRobotPose();
     }

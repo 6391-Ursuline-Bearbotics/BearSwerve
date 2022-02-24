@@ -129,8 +129,6 @@ public final class Falcon500SteerControllerFactoryBuilder {
 
             motor.setSelectedSensorPosition(absoluteEncoder.getAbsoluteAngle() / sensorPositionCoefficient, 0, CAN_TIMEOUT_MS);
 
-            
-
             // Reduce CAN status frame rates on real robots
             // Don't do this in simulation, or it causes lag and quantization of the voltage
             // signals which cause the sim model to be inaccurate and unstable.

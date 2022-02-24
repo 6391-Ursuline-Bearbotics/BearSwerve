@@ -20,4 +20,10 @@ public interface Gyroscope {
    * @param angle Angle to be set in degrees.
    */
   void setAngle(double angle);
+
+  /**
+   * Determines if the Gyro is ready to be used.
+   * @return True/False if the gyro is ready to be used.
+   */
+  Boolean getGyroReady();
 }

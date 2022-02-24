@@ -2,6 +2,7 @@ package frc.swervelib.ctre;
 
 import com.ctre.phoenix.sensors.BasePigeonSimCollection;
 import com.ctre.phoenix.sensors.WPI_PigeonIMU;
+import com.ctre.phoenix.sensors.PigeonIMU.PigeonState;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import frc.swervelib.Gyroscope;
@@ -24,6 +25,11 @@ public class PigeonFactoryBuilder {
         @Override
         public Rotation2d getGyroHeading() {
             return Rotation2d.fromDegrees(pigeon.getFusedHeading());
+        }
+
+        @Override
+        public Boolean getGyroReady() {
+            return pigeon.getState().equals(PigeonState.Ready);
         }
 
         @Override
