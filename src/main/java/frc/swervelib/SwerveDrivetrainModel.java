@@ -39,7 +39,7 @@ public class SwerveDrivetrainModel {
 
     Pose2d endPose;
     PoseTelemetry dtPoseView;
-    SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(SwerveConstants.KINEMATICS, getGyroscopeRotation());
+    SwerveDriveOdometry m_odometry;
 
     SwerveDrivePoseEstimator m_poseEstimator;
     Pose2d curEstPose = new Pose2d(SwerveConstants.DFLT_START_POSE.getTranslation(), SwerveConstants.DFLT_START_POSE.getRotation());
@@ -58,6 +58,8 @@ public class SwerveDrivetrainModel {
     public SwerveDrivetrainModel(ArrayList<SwerveModule> realModules, Gyroscope gyro){
         this.gyro = gyro;
         this.realModules = realModules;
+
+        m_odometry = new SwerveDriveOdometry(SwerveConstants.KINEMATICS, getGyroscopeRotation());
 
         if (RobotBase.isSimulation()) {
             modules.add(Mk4SwerveModuleHelper.createSim(realModules.get(0)));
@@ -154,7 +156,7 @@ public class SwerveDrivetrainModel {
         }
 
         // Update associated devices based on drivetrain motion
-        gyro.setAngle(swerveDt.getCurPose().getRotation().getDegrees());
+        gyro.setAngle(-swerveDt.getCurPose().getRotation().getDegrees());
 
         // Based on gyro and measured module speeds and positions, estimate where our
         // robot should have moved to.
@@ -293,10 +295,18 @@ public class SwerveDrivetrainModel {
     }
 
     public void updateOdometry() {
-        states[0].speedMetersPerSecond = Math.abs(realModules.get(0).getDriveVelocity());
-        states[1].speedMetersPerSecond = Math.abs(realModules.get(1).getDriveVelocity());
-        states[2].speedMetersPerSecond = Math.abs(realModules.get(2).getDriveVelocity());
-        states[3].speedMetersPerSecond = Math.abs(realModules.get(3).getDriveVelocity());
+/*      if (RobotBase.isReal()) {
+            states[0].speedMetersPerSecond = Math.abs(realModules.get(0).getDriveVelocity());
+            states[1].speedMetersPerSecond = Math.abs(realModules.get(1).getDriveVelocity());
+            states[2].speedMetersPerSecond = Math.abs(realModules.get(2).getDriveVelocity());
+            states[3].speedMetersPerSecond = Math.abs(realModules.get(3).getDriveVelocity());
+        }
+        else {
+            states[0].speedMetersPerSecond = Math.abs(modules.get(0).getWheelEncoderVelocityRPM());
+            states[1].speedMetersPerSecond = Math.abs(modules.get(1).getWheelEncoderVelocityRPM());
+            states[2].speedMetersPerSecond = Math.abs(modules.get(2).getWheelEncoderVelocityRPM());
+            states[3].speedMetersPerSecond = Math.abs(modules.get(3).getWheelEncoderVelocityRPM());
+        } */
         m_odometry.update(getGyroscopeRotation(), states);
     }
 }

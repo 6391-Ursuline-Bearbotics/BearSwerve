@@ -21,9 +21,24 @@ public final class Falcon500DriveControllerFactoryBuilder {
     private static final int CAN_TIMEOUT_MS_SIM = 100;
     private static final int STATUS_FRAME_GENERAL_PERIOD_MS_SIM = 100;
 
+    // PID configuration
+    private double proportionalConstant = Double.NaN;
+    private double integralConstant = Double.NaN;
+    private double derivativeConstant = Double.NaN;
 
     private double nominalVoltage = Double.NaN;
     private double currentLimit = Double.NaN;
+
+    public Falcon500DriveControllerFactoryBuilder withPidConstants(double proportional, double integral, double derivative) {
+        this.proportionalConstant = proportional;
+        this.integralConstant = integral;
+        this.derivativeConstant = derivative;
+        return this;
+    }
+
+    public boolean hasPidConstants() {
+        return Double.isFinite(proportionalConstant) && Double.isFinite(integralConstant) && Double.isFinite(derivativeConstant);
+    }
 
     public Falcon500DriveControllerFactoryBuilder withVoltageCompensation(double nominalVoltage) {
         this.nominalVoltage = nominalVoltage;
@@ -54,6 +69,12 @@ public final class Falcon500DriveControllerFactoryBuilder {
 
             double sensorPositionCoefficient = Math.PI * moduleConfiguration.getWheelDiameter() * moduleConfiguration.getDriveReduction() / TICKS_PER_ROTATION;
             double sensorVelocityCoefficient = sensorPositionCoefficient * 10.0;
+
+            if (hasPidConstants()) {
+                motorConfiguration.slot0.kP = proportionalConstant;
+                motorConfiguration.slot0.kI = integralConstant;
+                motorConfiguration.slot0.kD = derivativeConstant;
+            }
 
             if (hasVoltageCompensation()) {
                 motorConfiguration.voltageCompSaturation = nominalVoltage;
@@ -110,6 +131,11 @@ public final class Falcon500DriveControllerFactoryBuilder {
         @Override
         public void setReferenceVoltage(double voltage) {
             motor.set(TalonFXControlMode.PercentOutput, voltage / nominalVoltage);
+        }
+
+        @Override
+        public void setVelocity(double velocity) {
+            motor.set(TalonFXControlMode.Velocity, velocity / sensorVelocityCoefficient);
         }
 
         @Override

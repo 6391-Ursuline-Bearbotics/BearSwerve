@@ -171,7 +171,6 @@ public final class NeoSteerControllerFactoryBuilder {
         @Override
         public void setSteerEncoder(double position, double velocity) {
             motor.getEncoder().setPosition(position);
-            //motor.getEncoder()
         }
 
         @Override

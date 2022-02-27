@@ -16,4 +16,6 @@ public interface SwerveModule {
     void resetWheelEncoder();
 
     void set(double driveVoltage, double steerAngle);
+
+    void setVelocity(double driveVelocity, double steerAngle);
 }
