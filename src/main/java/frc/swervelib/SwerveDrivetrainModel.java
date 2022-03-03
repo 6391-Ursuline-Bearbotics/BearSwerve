@@ -294,6 +294,12 @@ public class SwerveDrivetrainModel {
         setModuleStates(m_holo.calculate(getPose(), desiredPose, 1, Rotation2d.fromDegrees(angle)));
     }
 
+    public void setMaxSpeeds(double forwardSpeed, double strafeSpeed, double rotateSpeed) {
+        SwerveConstants.MAX_FWD_REV_SPEED_MPS = forwardSpeed;
+        SwerveConstants.MAX_STRAFE_SPEED_MPS = strafeSpeed;
+        SwerveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC = rotateSpeed;
+    }
+
     public void updateOdometry() {
 /*      if (RobotBase.isReal()) {
             states[0].speedMetersPerSecond = Math.abs(realModules.get(0).getDriveVelocity());
