@@ -1,10 +1,12 @@
 package frc.swervelib.ctre;
 
+import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.CANCoderStatusFrame;
 
+import edu.wpi.first.wpilibj.Timer;
 import frc.swervelib.AbsoluteEncoder;
 import frc.swervelib.AbsoluteEncoderFactory;
 
@@ -48,7 +50,16 @@ public class CanCoderFactoryBuilder {
 
         @Override
         public double getAbsoluteAngle() {
-            double angle = Math.toRadians(encoder.getAbsolutePosition());
+            double time = Timer.getFPGATimestamp();
+			boolean success = false;
+			boolean timeout = false;
+			double angle = 0;
+			do {
+				angle = Math.toRadians(encoder.getPosition());
+				success = encoder.getLastError() == ErrorCode.OK;
+				timeout = Timer.getFPGATimestamp() - time > 2;
+			} while (!success && !timeout);
+            
             angle %= 2.0 * Math.PI;
             if (angle < 0.0) {
                 angle += 2.0 * Math.PI;

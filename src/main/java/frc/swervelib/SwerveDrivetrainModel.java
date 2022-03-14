@@ -191,6 +191,7 @@ public class SwerveDrivetrainModel {
     }
 
     public void setModuleStates(SwerveInput input) {
+        input = handleStationary(input);
         switch (orientationChooser.getSelected()) {
             case "Field Oriented":
                 states = SwerveConstants.KINEMATICS.toSwerveModuleStates(
@@ -314,5 +315,13 @@ public class SwerveDrivetrainModel {
             states[3].speedMetersPerSecond = Math.abs(modules.get(3).getWheelEncoderVelocityRPM());
         } */
         m_odometry.update(getGyroscopeRotation(), states);
+    }
+
+    private SwerveInput handleStationary(SwerveInput input) {
+        if (input.m_rotation == 0 && input.m_translationX == 0 && input.m_translationY == 0) {
+            // Hopefully this will turn all of the modules to the "turning" configuration so being pushed is more difficult
+            input.m_rotation = 0.0001;
+        }
+        return input;
     }
 }
