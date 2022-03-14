@@ -4,9 +4,9 @@
 
 BearSwerve is intended to be an all in one swerve solution including: teleop driving, simulation, trajectory following and more.  It combines the work of [SDS swerve-lib](https://github.com/SwerveDriveSpecialties/swerve-lib), gerth2's [Swerve Sim](https://github.com/wpilibsuite/allwpilib/pull/3374), and [PathPlanner](https://github.com/mjansen4857/pathplanner/releases)
 
-### Submodule
+### Vendor Dependancy
 
-Bearswerve is intended to be used as a GitSubmodule.  This is similar to a vendordep you may be used to with other third party libraries.  The advantage of the submodule is that the code is actually present within your code.  This makes modficiations and understanding what the submodule is doing easier.
+Bearswerve is intended to be used as a vendor dependancy.  It can be added using this online link: `https://raw.githubusercontent.com/6391-Ursuline-Bearbotics/BearSwerve/master/BearSwerve.json`.  You need to also have the: NavX, PathPlanner, CTRE Phoenix, and REVLib dependencies even if you aren't using them.
 
 ### BearSwerve Support
 
