@@ -3,6 +3,7 @@ package frc.swervelib;
 import java.util.ArrayList;
 
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPlannerTrajectory.PathPlannerState;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.VecBuilder;
@@ -234,6 +235,11 @@ public class SwerveDrivetrainModel {
         zeroGyroscope();
         updateDownfieldFlag();
         curEstPose = in;
+    }
+
+    public void setKnownState(PathPlannerState initialState) {
+        Pose2d startingPose = new Pose2d(initialState.poseMeters.getTranslation(), initialState.holonomicRotation);
+        setKnownPose(startingPose);
     }
 
     public void updateDownfieldFlag() {
