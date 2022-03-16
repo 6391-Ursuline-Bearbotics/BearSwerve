@@ -229,10 +229,9 @@ public class SwerveDrivetrainModel {
     }
 
     public void setKnownPose(Pose2d in) {
-        m_odometry.resetPosition(in, getGyroscopeRotation());
+        m_odometry.resetPosition(in, in.getRotation());
         resetWheelEncoders();
-        m_poseEstimator.resetPosition(in, getGyroscopeRotation());
-        zeroGyroscope();
+        m_poseEstimator.resetPosition(in, in.getRotation());
         updateDownfieldFlag();
         curEstPose = in;
     }
@@ -252,6 +251,7 @@ public class SwerveDrivetrainModel {
     }
 
     public Rotation2d getGyroscopeRotation() {
+        SmartDashboard.putNumber("Gyro Angle", gyro.getGyroHeading().getDegrees());
         return gyro.getGyroHeading();
     }
 
