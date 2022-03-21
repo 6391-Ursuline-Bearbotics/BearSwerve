@@ -8,5 +8,7 @@ public interface AbsoluteEncoder {
      */
     double getAbsoluteAngle();
 
+    double getAbsoluteAngleRetry();
+
     void setAbsoluteEncoder(double position, double velocity);
 }

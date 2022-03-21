@@ -13,6 +13,7 @@ import frc.swervelib.AbsoluteEncoderFactory;
 public class CanCoderFactoryBuilder {
     private Direction direction = Direction.COUNTER_CLOCKWISE;
     private int periodMilliseconds = 10;
+    private static double angle = 0;
 
     public CanCoderFactoryBuilder withReadingUpdatePeriod(int periodMilliseconds) {
         this.periodMilliseconds = periodMilliseconds;
@@ -49,17 +50,23 @@ public class CanCoderFactoryBuilder {
         }
 
         @Override
-        public double getAbsoluteAngle() {
+        public double getAbsoluteAngleRetry() {
             double time = Timer.getFPGATimestamp();
 			boolean success = false;
 			boolean timeout = false;
-			double angle = 0;
 			do {
-				angle = Math.toRadians(encoder.getPosition());
+				angle = getAbsoluteAngle();
 				success = encoder.getLastError() == ErrorCode.OK;
 				timeout = Timer.getFPGATimestamp() - time > 2;
 			} while (!success && !timeout);
-            
+
+            return angle;
+        }
+
+        @Override
+        public double getAbsoluteAngle() {
+            angle = Math.toRadians(encoder.getPosition());
+
             angle %= 2.0 * Math.PI;
             if (angle < 0.0) {
                 angle += 2.0 * Math.PI;

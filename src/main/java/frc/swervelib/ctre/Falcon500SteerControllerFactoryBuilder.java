@@ -127,7 +127,7 @@ public final class Falcon500SteerControllerFactoryBuilder {
             motor.setInverted(moduleConfiguration.isSteerInverted() ? TalonFXInvertType.CounterClockwise : TalonFXInvertType.Clockwise);
             motor.setNeutralMode(NeutralMode.Brake);
 
-            motor.setSelectedSensorPosition(absoluteEncoder.getAbsoluteAngle() / sensorPositionCoefficient, 0, CAN_TIMEOUT_MS);
+            motor.setSelectedSensorPosition(absoluteEncoder.getAbsoluteAngleRetry() / sensorPositionCoefficient, 0, CAN_TIMEOUT_MS);
 
             // Reduce CAN status frame rates on real robots
             // Don't do this in simulation, or it causes lag and quantization of the voltage
