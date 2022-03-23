@@ -17,7 +17,7 @@ public interface DriveControllerFactory<Controller extends DriveController, Driv
             ModuleConfiguration moduleConfiguration
     ) {
         var controller = create(driveConfiguration, moduleConfiguration);
-        addDashboardEntries(container, controller);
+        //addDashboardEntries(container, controller);
 
         return controller;
     }

@@ -18,7 +18,7 @@ public interface SteerControllerFactory<Controller extends SteerController, Stee
             ModuleConfiguration moduleConfiguration
     ) {
         var controller = create(steerConfiguration, moduleConfiguration);
-        addDashboardEntries(dashboardContainer, controller);
+        //addDashboardEntries(dashboardContainer, controller);
 
         return controller;
     }
