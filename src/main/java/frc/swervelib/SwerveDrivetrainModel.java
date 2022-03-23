@@ -56,6 +56,10 @@ public class SwerveDrivetrainModel {
     
     private static final SendableChooser<String> orientationChooser = new SendableChooser<>();
 
+    private double forwardSlow = 1.0;
+    private double strafeSlow = 1.0;
+    private double rotateSlow = 1.0;
+
     public SwerveDrivetrainModel(ArrayList<SwerveModule> realModules, Gyroscope gyro){
         this.gyro = gyro;
         this.realModules = realModules;
@@ -193,13 +197,14 @@ public class SwerveDrivetrainModel {
 
     public void setModuleStates(SwerveInput input) {
         input = handleStationary(input);
+
         switch (orientationChooser.getSelected()) {
             case "Field Oriented":
                 states = SwerveConstants.KINEMATICS.toSwerveModuleStates(
                         ChassisSpeeds.fromFieldRelativeSpeeds(
-                                input.m_translationX * SwerveConstants.MAX_FWD_REV_SPEED_MPS,
-                                input.m_translationY * SwerveConstants.MAX_STRAFE_SPEED_MPS,
-                                input.m_rotation * SwerveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC,
+                                input.m_translationX * SwerveConstants.MAX_FWD_REV_SPEED_MPS * forwardSlow,
+                                input.m_translationY * SwerveConstants.MAX_STRAFE_SPEED_MPS * strafeSlow,
+                                input.m_rotation * SwerveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC * rotateSlow,
                                 getGyroscopeRotation()
                         )    
                 );
@@ -207,9 +212,9 @@ public class SwerveDrivetrainModel {
             case "Robot Oriented":
                 states = SwerveConstants.KINEMATICS.toSwerveModuleStates(
                         new ChassisSpeeds(
-                                input.m_translationX * SwerveConstants.MAX_FWD_REV_SPEED_MPS,
-                                input.m_translationY * SwerveConstants.MAX_STRAFE_SPEED_MPS,
-                                input.m_rotation * SwerveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC
+                                input.m_translationX * SwerveConstants.MAX_FWD_REV_SPEED_MPS * forwardSlow,
+                                input.m_translationY * SwerveConstants.MAX_STRAFE_SPEED_MPS * strafeSlow,
+                                input.m_rotation * SwerveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC * rotateSlow
                         )  
                 );
                 break;
@@ -301,10 +306,10 @@ public class SwerveDrivetrainModel {
         setModuleStates(m_holo.calculate(getPose(), desiredPose, 1, Rotation2d.fromDegrees(angle)));
     }
 
-    public void setMaxSpeeds(double forwardSpeed, double strafeSpeed, double rotateSpeed) {
-        SwerveConstants.MAX_FWD_REV_SPEED_MPS = forwardSpeed;
-        SwerveConstants.MAX_STRAFE_SPEED_MPS = strafeSpeed;
-        SwerveConstants.MAX_ROTATE_SPEED_RAD_PER_SEC = rotateSpeed;
+    public void setMaxSpeeds(double forwardSlow, double strafeSlow, double rotateSlow) {
+        this.forwardSlow = forwardSlow;
+        this.strafeSlow = strafeSlow;
+        this.rotateSlow = rotateSlow;
     }
 
     public void updateOdometry() {
