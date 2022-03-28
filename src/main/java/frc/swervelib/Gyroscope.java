@@ -10,10 +10,10 @@ public interface Gyroscope {
   Rotation2d getGyroHeading();
 
   /**
-  * Sets the gyroscope angle to zero. This can be used to set the direction the robot is currently facing to the
+  * Sets the gyroscope angle. This can be used to set the direction the robot is currently facing to the
   * 'forwards' direction.
   */
-  void zeroGyroscope();
+  void zeroGyroscope(double angle);
 
   /**
    * Sets the simulated gyroscope to a specified angle

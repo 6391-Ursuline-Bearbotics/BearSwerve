@@ -14,7 +14,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -40,7 +39,6 @@ public class SwerveDrivetrainModel {
 
     Pose2d endPose;
     PoseTelemetry dtPoseView;
-    SwerveDriveOdometry m_odometry;
 
     SwerveDrivePoseEstimator m_poseEstimator;
     Pose2d curEstPose = new Pose2d(SwerveConstants.DFLT_START_POSE.getTranslation(), SwerveConstants.DFLT_START_POSE.getRotation());
@@ -63,8 +61,6 @@ public class SwerveDrivetrainModel {
     public SwerveDrivetrainModel(ArrayList<SwerveModule> realModules, Gyroscope gyro){
         this.gyro = gyro;
         this.realModules = realModules;
-
-        m_odometry = new SwerveDriveOdometry(SwerveConstants.KINEMATICS, getGyroscopeRotation());
 
         if (RobotBase.isSimulation()) {
             modules.add(Mk4SwerveModuleHelper.createSim(realModules.get(0)));
@@ -120,7 +116,6 @@ public class SwerveDrivetrainModel {
      */
     public void modelReset(Pose2d pose){
         swerveDt.modelReset(pose);
-        m_odometry.resetPosition(pose, getGyroscopeRotation());
     }
 
     /**
@@ -167,13 +162,11 @@ public class SwerveDrivetrainModel {
         // robot should have moved to.
         Pose2d prevEstPose = curEstPose;
         if (states != null) {
-            curEstPose = m_poseEstimator.update(getGyroscopeRotation(), states[0], states[1], states[2], states[3]);
+            curEstPose = m_poseEstimator.getEstimatedPosition();
         
             // Calculate a "speedometer" velocity in ft/sec
             Transform2d chngPose = new Transform2d(prevEstPose, curEstPose);
             curSpeed = Units.metersToFeet(chngPose.getTranslation().getNorm()) / SimConstants.CTRLS_SAMPLE_RATE_SEC;
-
-            updateDownfieldFlag();
         }
     }
 
@@ -226,18 +219,13 @@ public class SwerveDrivetrainModel {
     }
 
     public Pose2d getPose(){
-        return m_odometry.getPoseMeters();
-    }
-
-    public Pose2d getEstPose() {
-        return curEstPose;
+        return m_poseEstimator.getEstimatedPosition();
     }
 
     public void setKnownPose(Pose2d in) {
-        m_odometry.resetPosition(in, in.getRotation());
         resetWheelEncoders();
-        m_poseEstimator.resetPosition(in, in.getRotation());
-        updateDownfieldFlag();
+        gyro.zeroGyroscope(in.getRotation().getDegrees());
+        m_poseEstimator.resetPosition(in, getGyroscopeRotation());
         curEstPose = in;
     }
 
@@ -246,13 +234,8 @@ public class SwerveDrivetrainModel {
         setKnownPose(startingPose);
     }
 
-    public void updateDownfieldFlag() {
-      double curRotDeg = curEstPose.getRotation().getDegrees();
-      pointedDownfield = (curRotDeg > -90 && curRotDeg < 90);
-    }
-
     public void zeroGyroscope() {
-        gyro.zeroGyroscope();
+        gyro.zeroGyroscope(0.0);
     }
 
     public Rotation2d getGyroscopeRotation() {
@@ -312,26 +295,10 @@ public class SwerveDrivetrainModel {
         this.rotateSlow = rotateSlow;
     }
 
-    public void updateOdometry() {
-/*      if (RobotBase.isReal()) {
-            states[0].speedMetersPerSecond = Math.abs(realModules.get(0).getDriveVelocity());
-            states[1].speedMetersPerSecond = Math.abs(realModules.get(1).getDriveVelocity());
-            states[2].speedMetersPerSecond = Math.abs(realModules.get(2).getDriveVelocity());
-            states[3].speedMetersPerSecond = Math.abs(realModules.get(3).getDriveVelocity());
-        }
-        else {
-            states[0].speedMetersPerSecond = Math.abs(modules.get(0).getWheelEncoderVelocityRPM());
-            states[1].speedMetersPerSecond = Math.abs(modules.get(1).getWheelEncoderVelocityRPM());
-            states[2].speedMetersPerSecond = Math.abs(modules.get(2).getWheelEncoderVelocityRPM());
-            states[3].speedMetersPerSecond = Math.abs(modules.get(3).getWheelEncoderVelocityRPM());
-        } */
-        m_odometry.update(getGyroscopeRotation(), states);
-    }
-
     private SwerveInput handleStationary(SwerveInput input) {
         if (input.m_rotation == 0 && input.m_translationX == 0 && input.m_translationY == 0) {
             // Hopefully this will turn all of the modules to the "turning" configuration so being pushed is more difficult
-            input.m_rotation = 0.0001;
+            input.m_rotation = 0.0; //001;
         }
         return input;
     }
