@@ -57,7 +57,7 @@ public class CanCoderFactoryBuilder {
 			do {
 				angle = getAbsoluteAngle();
 				success = encoder.getLastError() == ErrorCode.OK;
-				timeout = Timer.getFPGATimestamp() - time > 2;
+				timeout = Timer.getFPGATimestamp() - time > 8;
 			} while (!success && !timeout);
 
             return angle;
